@@ -4,16 +4,31 @@
   --background: #ffffff;
   --foreground: #171717;
 
+  --midnight-blue: #0E1C36;
   --dark-gray: #3E505B;
+  --boring-blue: #7D84B2;
+  --border-gray: #9C9C9C;
+  --text-gray: #767676;
 
-  
+  --light-border-gray: #D0D0D0;
+
+  --navy-blue: #427AA1;
+  --error-red: #E0777D;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
+  --color-text-gray: var(--text-gray);
+  --color-light-border-gray: var(--light-border-gray);
+
+  --color-midnight-blue: var(--midnight-blue);
   --color-dark-gray: var(--dark-gray);
+  --color-boring-blue: var(--boring-blue);
+  --color-border-gray: var(--border-gray);
+  --color-navy-blue: var(--navy-blue);
+  --color-error-red: var(--error-red);
 }
 
 @media (prefers-color-scheme: light) {
