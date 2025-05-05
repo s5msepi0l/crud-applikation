@@ -66,13 +66,13 @@ export default function Login() {
                     />
                 
                 <div className="w-4/5">
-                <input className={` ${AnonymousPro.className}
+                <input type="text" className={` ${AnonymousPro.className}
                     border-2
                     ${error ? "border-error-red" : "border-border-gray"}
                     rounded-sm
                     w-full
                      
-                    text-
+                    
                 text-white placeholder-zinc-50 text-2xl`} 
                 placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)} />
