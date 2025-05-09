@@ -13,6 +13,8 @@
   --light-border-gray: #D0D0D0;
 
   --navy-blue: #427AA1;
+  --happy-blue: #74A4BC;
+
   --error-red: #E0777D;
 }
 
@@ -24,6 +26,8 @@
   --color-light-border-gray: var(--light-border-gray);
 
   --color-midnight-blue: var(--midnight-blue);
+  --color-happy-blue: var(--happy-blue);
+
   --color-dark-gray: var(--dark-gray);
   --color-boring-blue: var(--boring-blue);
   --color-border-gray: var(--border-gray);

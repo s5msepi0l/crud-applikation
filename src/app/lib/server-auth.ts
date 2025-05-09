@@ -12,5 +12,3 @@ export const db = new sqlite3.Database("./users.db", (err) => {
         console.log("DB OPEN!");
     }
 });
-
-export const sessions: {[key: string]: {userID: string}} = {};
