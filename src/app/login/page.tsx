@@ -1,21 +1,36 @@
 "use client";
 
 import { Anonymous_Pro } from "next/font/google";
-import { authClient } from "../lib/auth-client";
 
 import Form from "next/form";
 import Image from "next/image";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { authClient } from "../lib/auth-client";
+
 
 const AnonymousPro = Anonymous_Pro({
     weight: ["400", "700"],
     subsets: ["latin"]
-    });
+});
+
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [error, setError] = useState(true);
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const router = useRouter();
+
+    useEffect(() => {
+        const session = document.cookie.split('; ').some(cookie => cookie.startsWith('sessionID='));
+        if (session) {
+            router.push("/Dashboard");
+        }
+    });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,6 +49,18 @@ export default function Login() {
         data.then(data => data.json())
         .then(data => {
             console.log("data: ", data);
+            switch(data.action) {
+                case "redirect":
+                    router.push("/Dashboard");
+                    setError(false);
+
+                    break;
+
+                case "stay":
+                    setError(true);
+                    setErrorMsg(data.status);
+                    break;
+            }
         })
 
         console.log(data);
@@ -51,7 +78,7 @@ export default function Login() {
         <div className="bg-dark-gray h-112 w-1/4 rounded-md flex flex-col items-center">
             <h1 className={`${AnonymousPro.className} mt-4 mb-8 text-4xl text-center w-full text-white`}>Sign in to <span className="font-bold">Medibeddy</span></h1>
             
-            <Form className="flex flex-col w-full h-full items-center" 
+            <form className="flex flex-col w-full h-full items-center" 
             onSubmit={handleSubmit} >
                 <input 
                     className={` ${AnonymousPro.className}
@@ -94,7 +121,7 @@ export default function Login() {
                 text-4xl
                 `}
                 />
-            </Form>
+            </form>
             
             <hr className="w-4/5 h-1 mb-8 bg-border-gray rounded-2xl border-0"/>
 

@@ -13,6 +13,7 @@
   --light-border-gray: #D0D0D0;
 
   --navy-blue: #427AA1;
+  --text-blue: #91A6FF;
   --happy-blue: #74A4BC;
 
   --error-red: #E0777D;
@@ -27,6 +28,7 @@
 
   --color-midnight-blue: var(--midnight-blue);
   --color-happy-blue: var(--happy-blue);
+  --color-text-blue: var(--text-blue);
 
   --color-dark-gray: var(--dark-gray);
   --color-boring-blue: var(--boring-blue);
@@ -46,4 +48,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-family);
+}
+
+/* styles.css */
+@keyframes popupAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
