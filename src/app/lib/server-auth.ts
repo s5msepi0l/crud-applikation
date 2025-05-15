@@ -2,7 +2,6 @@ import sqlite3  from "sqlite3";
 import { init }  from "@paralleldrive/cuid2";
 import { LRUCache } from "lru-cache";
 
-
 export const createID = init({
     length: 16
 });
@@ -49,6 +48,41 @@ export async function getUserId(sessionID: string) {
     });
 
     return row.userID;
+}
+
+const congratsMessages = [
+  "Awesome job! You're keeping your streak strong 💪",
+  "Nice work! Every dose counts — and you're on fire 🔥",
+  "You're doing amazing! Keep up the great consistency 💊",
+  "Your dedication is paying off. Keep it going! 🌟",
+  "Proud of you! You're crushing your routine 🏆",
+  "That’s another step toward better health — well done! 🧠💖",
+  "You remembered again! Your streak is alive and well 🎉",
+  "Every time you stick to it, you build momentum — great job 🚀",
+  "Streak strong! Your future self will thank you 🙌",
+  "You're building a healthy habit — and it shows 🌱"
+];
+
+const streakResetMessages = [
+  "No worries — one missed dose doesn't define your progress ❤️",
+  "It happens! Just pick it back up. You're still doing great 💪",
+  "Don’t be hard on yourself — tomorrow’s another chance 🌅",
+  "Streaks reset, but your commitment doesn’t 💊 Keep going!",
+  "One slip isn’t failure. It’s part of the journey. You’ve got this 🌱",
+  "Even the best miss a day — consistency over perfection 🚶‍♂️➡️🏃‍♀️",
+  "Hey, missing one doesn’t erase your progress. You’re still ahead 🙌",
+  "You're human! Reset and restart — we're with you 💖",
+  "Streak lost? No big deal. You’re still building something strong 🧱",
+  "It's not about the streak. It’s about showing up again — and you will 💫"
+];
+
+
+// get random message for holding streak
+export function getMessage(streak: number) {
+    if (streak == 0) {
+        return streakResetMessages[Math.floor(Math.random() * streakResetMessages.length)];
+    }
+    return congratsMessages[Math.floor(Math.random() * congratsMessages.length)];
 }
 
 export type Medication = {
@@ -154,7 +188,7 @@ export const MedicationHandler = {
     profile: async (ID: number): Promise<Profile> => {
 
         // we cookin w this one
-        const cached: Profile = MedicationHandler.cache.get(ID);
+        const cached = MedicationHandler.cache.get(ID);
         if (cached !== undefined) {
             console.log(`Fetching user profile "${ID}" from cache`);
             return cached;
