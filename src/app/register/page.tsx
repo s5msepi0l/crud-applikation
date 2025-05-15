@@ -36,7 +36,7 @@ export default function Login() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const data = fetch("/api/login", {
+        const data = fetch("/api/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,9 +50,9 @@ export default function Login() {
         data.then(data => data.json())
         .then(data => {
             console.log("data: ", data);
-            switch(data.action) {
+                    switch(data.action) {
                 case "redirect":
-                    router.push("/Dashboard");
+                    router.push("/login");
                     setError(false);
 
                     break;
@@ -64,7 +64,7 @@ export default function Login() {
             }
         })
 
-        console.log(data);
+
 
         console.log(`Submitting: ${email}`)
     }
@@ -76,8 +76,8 @@ export default function Login() {
     }
 
     return (<main className="flex w-screen h-screen justify-center items-center">
-        <div className="bg-dark-gray h-112 w-1/4 rounded-md flex flex-col items-center">
-            <h1 className={`${AnonymousPro.className} mt-4 mb-8 text-4xl text-center w-full text-white`}>Sign in to <span className="font-bold">Medibeddy</span></h1>
+        <div className="bg-dark-gray h-80 w-1/4 rounded-md flex flex-col items-center">
+            <h1 className={`${AnonymousPro.className} mt-4 mb-8 text-4xl text-center w-full text-white`}>Register with <span className="font-bold">Medibeddy</span></h1>
             
             <form className="flex flex-col w-full h-full items-center" 
             onSubmit={handleSubmit} >
@@ -104,58 +104,28 @@ export default function Login() {
                 text-white placeholder-zinc-50 text-2xl`} 
                 placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)} />
-                { (error ? (<p className="text-error-red">Email or password is incorrect</p>): (<p></p>))}
+                { (error ? (<p className="text-error-red">{errorMsg}</p>): (<p></p>))}
 
                 </div>
 
+                <hr className="w-4/5 h-1 p-0 mt-8 bg-border-gray rounded-2xl border-0"/>
+
                 <input
                 type="submit"
-                value="Sign in"
+                value="Register"
                 onClick={(e) => console.log("submit")}
                 className={`
                 ${AnonymousPro.className}
-                mt-4 mb-8 bg-navy-blue text-white
+                
+                mt-auto mb-8 bg-navy-blue text-white
                 w-1/2
-                h-1/4
+                h-1/5
                 rounded-xl
                 text-4xl
                 `}
                 />
             </form>
 
-            <h1 className={`${AnonymousPro.className} text-center text-white font-bold text-xl`}> Dont have an account? <br/> <Link href="/register" className="text-text-blue">Register now</Link> </h1>
-        
-            <hr className="w-4/5 h-1 mb-8 bg-border-gray rounded-2xl border-0"/>
-
-            <div 
-                className={`${AnonymousPro.className}
-                flex items-center justify-evenly
-                font-sans text-2xl
-                bg-white
-                mb-4
-                p-1
-                rounded-lg
-                border-2
-                border-gray-400
-                `}
-                
-                onClick={altSignin}
-                >
-                
-                <Image
-                    src="/github.svg"
-                    alt="Github signin"
-
-                    className="bg-white rounded-full "
-
-                    width={51}
-                    height={51}
-                />
-
-
-                <span className="ml-4"
-                >Sign in with <span className="font-black">Github</span></span>
-            </div>
         
         </div>
 

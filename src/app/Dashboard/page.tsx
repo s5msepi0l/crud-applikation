@@ -1,6 +1,9 @@
-import React from 'react'
+"use client";
+
+import React, { useEffect } from 'react'
 import Header from '../components/header'
 import NavBar from '../components/nav'
+
 
 import { Anonymous_Pro } from "next/font/google";
 const AnonymousPro = Anonymous_Pro({
@@ -8,7 +11,28 @@ const AnonymousPro = Anonymous_Pro({
   subsets: ["latin"]
 });
 
+
 export default function Dashboard() {
+  const didFetch = React.useRef(false);
+
+  useEffect( () => {(async () => {
+    if (didFetch.current) return;
+    didFetch.current = true;
+
+    const response = await fetch("/api/dashboard/get", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+
+  })() }, []);
+
+
   return (
     <div className='w-screen h-screen'>
       <Header/>

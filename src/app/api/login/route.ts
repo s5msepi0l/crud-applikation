@@ -27,8 +27,6 @@ export async function POST(req: NextRequest) {
     if (row) {
         const sessionID = createID();
         
-        //sessions[sessionID] = { userID: row.ID };        
-
         const err = await new Promise<any>((resolve, reject) => {
             db.run(`INSERT INTO sessions (id, userID) VALUES ("${sessionID}", ${row.id});`, (err) => {
                 if (err) reject(err);
