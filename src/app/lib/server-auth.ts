@@ -40,6 +40,7 @@ export async function userExists(email: string) {
 }
 
 export async function getUserId(sessionID: string) {
+    console.log("sessionID: ", sessionID);
     const row = await new Promise<any>((resolve, reject) => {
         db.get(`SELECT userID FROM sessions WHERE ID = "${sessionID}";`, (err, row) => {
             if (err) reject(err);
@@ -90,7 +91,10 @@ export type Medication = {
 
     name: string,
     dosage: string,
+    
     frequency: number,
+    frequencyOffset: number,
+
     description: string,
     remaining: number,
     streak: number
@@ -129,6 +133,25 @@ export class Profile {
                 else resolve(row);
             });
         });
+
+        for (let i = 0; i < data.length; i++) {
+            const element: Medication = {
+                id: data[i].id,
+                
+                name: data[i].name,
+                dosage: data[i].dosage,
+
+                frequency: data[i].frequency_h,
+                frequencyOffset: data[i].frequency_h_offset,
+
+                remaining: data[i].remaining,
+                streak: data[i].streak,
+
+                description: data[i].description,
+            };
+
+            this.medications.push(element)
+        }
 
         console.log("data: ", data);
     }
