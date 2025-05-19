@@ -9,8 +9,6 @@ const imageN = 4;
 //return one of four random pill svg's
 export async function GET(req: NextRequest, {params}: {params: Promise<string>}){
     const parsedParams = await params;
-    
-    console.log("ID::::", parsedParams);
 
     console.log(process.cwd());
     const imgPath = path.resolve(`${process.cwd()}/public/pill/${Math.floor(Math.random() * imageN) + 1}.svg`);

@@ -4,8 +4,7 @@ import { getUserId, MedicationHandler } from "@/app/lib/server-auth";
 
 export async function POST(req: NextRequest) {
     const data = await req.json();
-    const medicationID  = data.id;
-
+console.log("here");
     // validate session first then get profile
     if (req.cookies.has("sessionID")) {
         let sessionID = String(req.cookies.get("sessionID")?.value);
@@ -13,9 +12,11 @@ export async function POST(req: NextRequest) {
 
         if (userID) { //session is valid get profile
             let profile = await MedicationHandler.profile(userID);
-            const res = await profile.use(medicationID);
-            console.log("res: ", res);
-            return NextResponse.json({Status: "Allowed"});
+            const meds = await profile.comingUp();
+            
+            console.log("coming up: ", meds);
+
+            return NextResponse.json({Status: "Allowed", data: JSON.stringify(meds)});
         }
     }
     return NextResponse.json({status: "Unathorized"});

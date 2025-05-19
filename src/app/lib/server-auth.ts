@@ -1,6 +1,8 @@
 import sqlite3  from "sqlite3";
 import { init }  from "@paralleldrive/cuid2";
 import { LRUCache } from "lru-cache";
+import { promise } from "better-auth";
+import { dateCmp } from "./util";
 
 export const createID = init({
     length: 16
@@ -153,16 +155,66 @@ export class Profile {
             this.medications.push(element)
         }
 
-        console.log("data: ", data);
+        
+
+    }
+
+    //true/false depending on if there's any errors
+    async use(medicationID: number) {
+        console.log("use: ", medicationID);
+        return await new Promise<any>((resolve, reject) => {            
+            db.run(`INSERT INTO medication_log (user_id, medication_id) VALUES (${this.id}, ${medicationID});`, (err) => {
+                if (err) reject(false);
+                else resolve(true);
+            });
+        });
     }
 
     // medicine newal set medication(remaining) to remaining
     async renew(id: number, remaining: number) {
+        db.run(`UPDATE medication SET remaining = ${remaining} WHERE id = ${id};`, (err) => {
+
+        });
+
         return true;
     }
 
+    // do some weird server side logic to flag medication should to taken now
     async comingUp() {
-        return [];
+       const data = await new Promise<any>((resolve, reject) => {
+            db.prepare(`
+            SELECT
+                m.id AS medication_id,
+                m.name,
+                m.dosage,
+                m.frequency_h,
+                m.description,
+                m.remaining,
+                m.streak,
+                m.frequency_h_offset,
+                MAX(ml.taken_at) AS last_taken_at
+            FROM medication m
+            LEFT JOIN medication_log ml ON m.id = ml.medication_id
+            WHERE m.user_id = ?
+            GROUP BY m.id;
+            `).all(this.id, (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows);
+            });
+        });
+
+        for (let i = 0; i < data.length; i++) {
+            if (dateCmp(data[i].last_taken_at)) { // dont take meds
+                data[i].useNow = false;
+            } else { //take meds now, 
+                data[i].useNow = true;
+            }   
+
+        }
+
+        console.log("data: ", data);
+
+        return data;
     }
 
     async runningOut() {
