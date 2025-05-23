@@ -8,9 +8,12 @@ const imageN = 4;
 //return one of four random pill svg's
 export async function GET(req: NextRequest, {params}: {params: Promise<string>}){
     const parsedParams = await params;
+    const { id, streak } = parsedParams;
+    
+    console.log("parsedParams streak icon: ", parsedParams);
 
     console.log(process.cwd());
-    const imgPath = path.resolve(`${process.cwd()}/public/pill/${Math.floor(Math.random() * imageN) + 1}.svg`);
+    const imgPath = path.resolve(`${process.cwd()}/public/emotion/${(streak == 0)? "sad": "happy"}/${id}.svg`);
     const imgBuffer = fs.readFileSync(imgPath, "utf-8");
 
 

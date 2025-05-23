@@ -23,7 +23,6 @@ export async function POST(req: NextRequest) {
             else resolve(row);
         });
     });
-    console.log("row; ", row);
     if (row) {
         const sessionID = createID();
         

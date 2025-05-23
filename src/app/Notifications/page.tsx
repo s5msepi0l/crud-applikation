@@ -1,14 +1,12 @@
 "use client";
 
-//import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue} from "@heroui/react";
-
 import Image from "next/image";
 import NavBar from "../components/nav";
 import Header from "../components/header";
 import { Anonymous_Pro } from "next/font/google";
 
-import { authClient } from "../lib/auth-client";
-import { useEffect } from "react";
+
+import { useEffect, useState } from "react";
 
 const AnonymousPro = Anonymous_Pro({
   weight: ["400", "700"],
@@ -16,12 +14,23 @@ const AnonymousPro = Anonymous_Pro({
 });
 
 export default function notifications() {
+    const [notifications, setNotifications] = useState<{date: string, category: string, details: string }[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            const response = await fetch("/api/notification");
+            const data = await response.json();
+
+            setNotifications(data);
+        })();
+
+    }, [])
+
     const refresh = async () => {
         console.log("refresh");
     }
 
-    const {data: session} = authClient.useSession();
-console.log(session);
+
     return (<div className="h-full w-full">
         <Header/>
         <NavBar>
@@ -66,12 +75,16 @@ console.log(session);
                             </tr>
                         </thead>
                         <tbody className="text-text-gray font-bold text-xl">
-                            <tr className="border-b-4 border-light-border-gray">
-                                <td className="pl-4">April 28, 2025</td>
-                                <td className="">System</td>
-                                <td className="">Notification example.</td>
-                            </tr>
-                            
+                            {
+                                notifications.map((item, index) => (
+                                <tr key={index} className="border-b-4 border-light-border-gray">
+                                    <td className="pl-4">{item.date}</td>
+                                    <td className="">{item.category}</td>
+                                    <td className="">{item.details}</td>
+                                </tr>
+                                ))
+                                
+                            }
                         </tbody>
                     </table>
                 </div>

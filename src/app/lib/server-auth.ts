@@ -136,6 +136,8 @@ export class Profile {
             });
         });
 
+        let low = 0;
+
         for (let i = 0; i < data.length; i++) {
             const element: Medication = {
                 id: data[i].id,
@@ -154,29 +156,49 @@ export class Profile {
 
             this.medications.push(element)
         }
+    }
 
-        
-
+    async logout() {
+        return await new Promise<any>((resolve, reject) => {
+            db.prepare("DELETE FROM sessions WHERE userID = ?;").get(this.id, (err) => {
+                if (err) reject(false);
+                else resolve(true);
+            })
+        })
     }
 
     //true/false depending on if there's any errors
     async use(medicationID: number) {
         console.log("use: ", medicationID);
-        return await new Promise<any>((resolve, reject) => {            
+        
+        const decrement = await new Promise<any>((resolve, reject) => {
+            db.prepare("UPDATE medication SET remaining = remaining - 1 WHERE id = ?;").run(medicationID, (err) => {
+                if (err) reject(false);
+                else resolve(true);
+            })
+        });
+
+        const log = await new Promise<any>((resolve, reject) => {            
             db.run(`INSERT INTO medication_log (user_id, medication_id) VALUES (${this.id}, ${medicationID});`, (err) => {
                 if (err) reject(false);
                 else resolve(true);
             });
         });
+
+        return (decrement && log);
     }
 
-    // medicine newal set medication(remaining) to remaining
-    async renew(id: number, remaining: number) {
-        db.run(`UPDATE medication SET remaining = ${remaining} WHERE id = ${id};`, (err) => {
-
-        });
-
-        return true;
+    // medicine newal set medication(remaining) to remaining_s
+    async refill(id: number) {
+        const data = await new Promise<any>((resolve, reject) => {
+            console.log("id: ", id);
+            db.prepare("UPDATE medication SET remaining = remaining_s WHERE id = ?;").run(id, (err: any) => {
+                if (err) reject(false);
+                else resolve(true);
+            })
+        })
+        console.log("refill status: ", data);
+        return data;
     }
 
     // do some weird server side logic to flag medication should to taken now
@@ -212,13 +234,19 @@ export class Profile {
 
         }
 
-        console.log("data: ", data);
 
         return data;
     }
 
     async runningOut() {
-        return [];
+        const data = await new Promise<any>((resolve, reject) => {
+            db.prepare("SELECT * FROM medication WHERE user_id = ? ORDER BY remaining ASC").all(this.id, (err, rows) => {
+                if (err) reject (err);
+                else resolve(rows);
+            });
+        });
+
+        return data;
     }
 
     // calculate a rough adherance rate

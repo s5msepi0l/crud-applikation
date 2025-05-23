@@ -76,7 +76,7 @@ export default function Login() {
     }
 
     return (<main className="flex w-screen h-screen justify-center items-center">
-        <div className="bg-dark-gray h-112 w-1/4 rounded-md flex flex-col items-center">
+        <div className="bg-dark-gray h-88 w-1/4 rounded-md flex flex-col items-center">
             <h1 className={`${AnonymousPro.className} mt-4 mb-8 text-4xl text-center w-full text-white`}>Sign in to <span className="font-bold">Medibeddy</span></h1>
             
             <form className="flex flex-col w-full h-full items-center" 
@@ -94,7 +94,7 @@ export default function Login() {
                     />
                 
                 <div className="w-4/5">
-                <input type="text" className={` ${AnonymousPro.className}
+                <input type="text" className={` ${AnonymousPro.className}<
                     border-2
                     ${error ? "border-error-red" : "border-border-gray"}
                     rounded-sm
@@ -125,38 +125,7 @@ export default function Login() {
 
             <h1 className={`${AnonymousPro.className} text-center text-white font-bold text-xl`}> Dont have an account? <br/> <Link href="/register" className="text-text-blue">Register now</Link> </h1>
         
-            <hr className="w-4/5 h-1 mb-8 bg-border-gray rounded-2xl border-0"/>
 
-            <div 
-                className={`${AnonymousPro.className}
-                flex items-center justify-evenly
-                font-sans text-2xl
-                bg-white
-                mb-4
-                p-1
-                rounded-lg
-                border-2
-                border-gray-400
-                `}
-                
-                onClick={altSignin}
-                >
-                
-                <Image
-                    src="/github.svg"
-                    alt="Github signin"
-
-                    className="bg-white rounded-full "
-
-                    width={51}
-                    height={51}
-                />
-
-
-                <span className="ml-4"
-                >Sign in with <span className="font-black">Github</span></span>
-            </div>
-        
         </div>
 
     </main> );

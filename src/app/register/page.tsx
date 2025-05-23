@@ -49,7 +49,6 @@ export default function Login() {
 
         data.then(data => data.json())
         .then(data => {
-            console.log("data: ", data);
                     switch(data.action) {
                 case "redirect":
                     router.push("/login");

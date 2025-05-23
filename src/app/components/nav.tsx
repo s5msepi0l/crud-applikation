@@ -19,9 +19,14 @@ export default function NavBar({children}: {children: React.ReactNode}) {
   const router = useRouter();
 
   const logout = async () => {
-    console.log("logout");
-    await authClient.signOut();
-    router.push("/login");
+    const response = await fetch("/api/logout");
+    const data = await response.json();
+
+    if (data.status === "success") {
+      document.cookie = "";
+      router.push("/login");
+    }
+    router.push("/register");
   }
 
   useEffect(() => {
@@ -36,7 +41,6 @@ export default function NavBar({children}: {children: React.ReactNode}) {
             link.classList.add("font-bold");
         }
         
-        console.log(link); // Log the text content of each link or div
       });
     }
   }, []); // Run once when the component mounts
